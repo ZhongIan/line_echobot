@@ -130,8 +130,9 @@ def get_env_variable(var_name):
         print(error_msg)
         
 SECRET_KEY = get_env_variable('SECRET_KEY')
-LINE_CHANNEL_ACCESS_TOKEN = get_env_variable('LINE_CHANNEL_ACCESS_TOKEN')
-LINE_CHANNEL_SECRET = get_env_variable('LINE_CHANNEL_SECRET')
+YOUR_CHANNEL_ACCESS_TOKEN = get_env_variable('YOUR_CHANNEL_ACCESS_TOKEN')
+YOUR_CHANNEL_SECRET = get_env_variable('YOUR_CHANNEL_SECRET')
+Your_user_ID = get_env_variable('Your_user_ID')
  
 django_heroku.settings(locals())
 
