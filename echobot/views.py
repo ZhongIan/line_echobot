@@ -10,6 +10,8 @@ def index(request):
     print(r.text)
     return HttpResponse('<pre>' + r.text + '</pre>')
 
+
+
 # @Initial
 from line_echobot import settings
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
@@ -26,9 +28,28 @@ line_bot_api = LineBotApi(settings.YOUR_CHANNEL_ACCESS_TOKEN)
 # Define Receiver 
 handler = WebhookHandler(settings.YOUR_CHANNEL_SECRET)
 
+from bs4 import BeautifulSoup
+
+def oil_price():
+    target_url = 'https://gas.goodlife.tw/'
+    rs = requests.session()
+    res = rs.get(target_url, verify=False)
+    soup = BeautifulSoup(res.text, 'html.parser')
+    title = soup.select('#main')[0].text.replace('\n', '').split('(')[0]
+    gas_price = soup.select('#gas-price')[0].text.replace('\n\n\n', '').replace(' ', '')
+    cpc = soup.select('#cpc')[0].text.replace(' ', '')
+    content = '{}\n{}{}'.format(title, gas_price, cpc)
+    return content
+
 # 文字訊息處理器
 @handler.add(MessageEvent, message=TextMessage)
 def handle_text_message(event):
+    if event.message.text == "油價查詢":
+        content = oil_price()
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=content))
+        return 0
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=event.message.text)

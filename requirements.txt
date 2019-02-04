@@ -3,3 +3,4 @@ gunicorn
 django-heroku
 line-bot-sdk
 requests
+beautifulsoup4
