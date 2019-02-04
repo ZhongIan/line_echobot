@@ -23,7 +23,8 @@ from linebot import LineBotApi, WebhookParser, WebhookHandler
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
-    TemplateSendMessage, ButtonsTemplate, MessageTemplateAction
+    TemplateSendMessage, ButtonsTemplate, MessageTemplateAction,
+    URIAction
 )
 
 line_bot_api = LineBotApi(settings.YOUR_CHANNEL_ACCESS_TOKEN)
