@@ -21,7 +21,10 @@ from django.views.decorators.csrf import csrf_exempt
 # @ line API
 from linebot import LineBotApi, WebhookParser, WebhookHandler
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
-from linebot.models import MessageEvent, TextMessage, TextSendMessage
+from linebot.models import (
+    MessageEvent, TextMessage, TextSendMessage,
+    TemplateSendMessage, ButtonsTemplate, MessageTemplateAction
+)
 
 line_bot_api = LineBotApi(settings.YOUR_CHANNEL_ACCESS_TOKEN)
 
@@ -44,6 +47,26 @@ def oil_price():
 # 文字訊息處理器
 @handler.add(MessageEvent, message=TextMessage)
 def handle_text_message(event):
+
+    if event.message.text == "開始玩":
+        buttons_template = TemplateSendMessage(
+            alt_text='開始玩 template',
+            template=ButtonsTemplate(
+                title='選擇服務',
+                text='請選擇',
+                thumbnail_image_url='https://i.imgur.com/xQF5dZT.jpg',
+                actions=[
+                    MessageTemplateAction(
+                        label='油價查詢',
+                        text='油價查詢'
+                    )
+                ]
+            )
+        )
+
+        line_bot_api.reply_message(event.reply_token, buttons_template)
+        return 0
+
     if event.message.text == "油價查詢":
         content = oil_price()
         line_bot_api.reply_message(
