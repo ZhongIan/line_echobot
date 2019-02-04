@@ -62,8 +62,8 @@ def handle_text_message(event):
                         text='油價查詢'
                     ),
                     URIAction(
-                        label='分享 bot',
-                        uri='https://line.me/R/nv/recommendOA/@1623116169'
+                        label='分享 bot',##@kgo9924i https://line.me/R/ti/p/%40kgo9924i
+                        uri='https://line.me/R/nv/recommendOA/@kgo9924i'
                     ),
                     URIAction(
                         label='youtube 程式教學分享頻道',
