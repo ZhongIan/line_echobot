@@ -24,9 +24,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -105,10 +105,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
-# 預設文字
-LANGUAGE_CODE = 'zh-hant'
-# 時區
-TIME_ZONE = 'Asia/Taipei'
+LANGUAGE_CODE = "en-us"
+
+TIME_ZONE = "UTC"
 
 USE_I18N = True
 
