@@ -16,9 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include
 from django.urls import path
+from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     # 讓 project 可以找到 echobot這個app的 urls.py
     path('echobot/', include('echobot.urls')), 
+    # TEST
+    path('', views.index),
 ]
