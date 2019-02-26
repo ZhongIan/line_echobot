@@ -64,10 +64,6 @@ def handle_text_message(event):
                     URIAction(
                         label='分享 bot',##@kgo9924i https://line.me/R/ti/p/%40kgo9924i
                         uri='https://line.me/R/nv/recommendOA/@kgo9924i'
-                    ),
-                    URIAction(
-                        label='youtube 程式教學分享頻道',
-                        uri='https://www.youtube.com/channel/UCPhn2rCqhu0HdktsFjixahA'
                     )
                 ]
             )
@@ -82,6 +78,7 @@ def handle_text_message(event):
             event.reply_token,
             TextSendMessage(text=content))
         return 0
+        
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=event.message.text)
