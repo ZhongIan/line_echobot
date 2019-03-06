@@ -6,6 +6,7 @@ import requests
 from django.http import HttpResponse
 
 def index(request):
+    # 顏文字
     r = requests.get('http://httpbin.org/status/418')
     print(r.text)
     return HttpResponse('<pre>' + r.text + '</pre>')
@@ -35,14 +36,25 @@ handler = WebhookHandler(settings.YOUR_CHANNEL_SECRET)
 from bs4 import BeautifulSoup
 
 def oil_price():
-    target_url = 'https://gas.goodlife.tw/'
-    rs = requests.session()
-    res = rs.get(target_url, verify=False)
+    url = 'https://gas.goodlife.tw/'
+    res = requests.get(url)
     soup = BeautifulSoup(res.text, 'html.parser')
-    title = soup.select('#main')[0].text.replace('\n', '').split('(')[0]
+    # 最後更新時間
+    main = soup.select('#main')[0].text.replace('\n', '').split('(')[0]
+    # 調整
     gas_price = soup.select('#gas-price')[0].text.replace('\n\n\n', '').replace(' ', '')
-    cpc = soup.select('#cpc')[0].text.replace(' ', '')
-    content = '{}\n{}{}'.format(title, gas_price, cpc)
+    # 油價
+    cpc = soup.select('#cpc')[0].text.replace(' ', '').split('\n')
+
+    cpc_title = cpc[1] # 今日中油油價
+    cpc_92 = cpc[5]
+    cpc_95 = cpc[8]
+    cpc_98 = cpc[11]
+    cpc_柴油 = cpc[14]
+
+    content = f'{main}\n{gas_price}\n\n' + \
+        f'{cpc_title}\n 92汽油:{cpc_92}\n 95汽油:{cpc_95}\n 98汽油:{cpc_98}\n 柴油:{cpc_柴油}'
+
     return content
 
 # 文字訊息處理器
@@ -90,7 +102,9 @@ def default(event):
     print(event)
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text='Currently Not Support None Text Message')
+        TextSendMessage(
+            text='Currently Not Support None Text Message \n' + '不支持此格式'
+            )
     )
 
 # @csrf_exempt 放棄 djaogo 的 csrf 認證
