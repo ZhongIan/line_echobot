@@ -1,6 +1,7 @@
-django
+django==2.1.5
+requests==2.18.4
+beautifulsoup4==4.6.0
+pandas==0.23.0
+line-bot-sdk==1.8.0
 gunicorn
 django-heroku
-line-bot-sdk
-requests
-beautifulsoup4
