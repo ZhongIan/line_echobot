@@ -26,7 +26,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -121,7 +121,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-
+# 環境變數
 def get_env_variable(var_name):
     try:
         return os.environ[var_name]
@@ -135,6 +135,4 @@ YOUR_CHANNEL_SECRET = get_env_variable('YOUR_CHANNEL_SECRET')
 Your_user_ID = get_env_variable('Your_user_ID')
  
 django_heroku.settings(locals())
-
-
 

@@ -34,7 +34,18 @@ line_bot_api = LineBotApi(settings.YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(settings.YOUR_CHANNEL_SECRET)
 
 from bs4 import BeautifulSoup
+from ast import literal_eval
 
+import pandas as pd
+import sqlite3
+
+# 股票代號
+conn = sqlite3.connect("db.sqlite3")
+df1 = pd.read_sql('SELECT * FROM stock', conn, index_col=['id'])
+# 內容
+#df1['stock'].values
+
+# 油價資訊 
 def oil_price():
     url = 'https://gas.goodlife.tw/'
     res = requests.get(url)
@@ -57,13 +68,56 @@ def oil_price():
 
     return content
 
+# 股價資訊
+def stock_info(stock_name='2330'):
+    # 新聞網址 news_target為相對網址，需要 domain_url
+    domain_url = 'https://www.wantgoo.com/'
+    stock_url = 'https://www.wantgoo.com/stock/' + stock_name
+    # response
+    res = requests.get(stock_url)
+    # 解析
+    soup = BeautifulSoup(res.text, 'html.parser')
+    # 目標: 新聞
+    news_target = soup.find_all('ul', class_='ell lists')[0].find_all('a')
+    news_content = ''
+    # 只取 5筆
+    if len(news_target)>5:
+        num = 5
+    else :
+        num = len(news_target)
+    for i in range(num):
+        news_content += f"{news_target[i].text} \n " + \
+            f"{domain_url + news_target[i].get('href')} \n\n"
+    
+    # 即時股價資訊，需要 headers 進行訪問
+    head = {
+        'referer': stock_url,
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36'
+    }
+
+    realtime_url = 'https://www.wantgoo.com/stock/astock/realtimechartupdatedata?StockNo=' + stock_name
+    res = requests.get(realtime_url,headers=head)
+    
+    # eval() :str -> 轉成程式碼 ; res.json()['returnValues'] 回傳文字
+    # https://stackoverflow.com/questions/30109030/how-does-strlist-work
+    realtime_stock_info = literal_eval(
+        res.json()['returnValues'].replace('null','"nan"') # 更換空值 null -> nan
+    )['_01_基本股價資訊']
+
+    stock_info_content = ''
+    for i in ['更新時間','StockNo','Name','開','高','低','收','成交量']:
+        stock_info_content += f'{i}: {realtime_stock_info[i]} \n'
+    
+    content = '相關新聞:\n' + news_content + '即時股價資訊:\n' + stock_info_content
+    return content
+
 # 文字訊息處理器
 @handler.add(MessageEvent, message=TextMessage)
 def handle_text_message(event):
 
-    if event.message.text == "開始玩":
+    if event.message.text == "開始":
         buttons_template = TemplateSendMessage(
-            alt_text='開始玩 template',
+            alt_text='開始 template',
             template=ButtonsTemplate(
                 title='選擇服務',
                 text='請選擇',
@@ -72,6 +126,10 @@ def handle_text_message(event):
                     MessageTemplateAction(
                         label='油價查詢',
                         text='油價查詢'
+                    ),
+                    MessageTemplateAction(
+                        label='股價資訊',
+                        text='股價資訊'
                     ),
                     URIAction(
                         label='分享 bot',
@@ -83,6 +141,7 @@ def handle_text_message(event):
         )
 
         line_bot_api.reply_message(event.reply_token, buttons_template)
+
         return 0
 
     if event.message.text == "油價查詢":
@@ -91,11 +150,26 @@ def handle_text_message(event):
             event.reply_token,
             TextSendMessage(text=content))
         return 0
-        
-    line_bot_api.reply_message(
+    
+    if event.message.text == "股價資訊":
+        content = '請輸入股票代號 \n 如: 2330'
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=content))
+        return 0
+    # 判斷是否為股票代號
+    if event.message.text in df1['stock'].values:
+        content = stock_info(stock_name=event.message.text)
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=content))
+        return 0
+
+    # 重複接收的訊息
+    """ line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=event.message.text)
-    )
+    ) """
 
 # 一般訊息處理器 e.g. 貼圖 圖片 i.e. 除已定義的處理器外
 @handler.default()
@@ -114,8 +188,6 @@ def callback(request):
     if request.method == 'POST':
         signature = request.META['HTTP_X_LINE_SIGNATURE']
         body = request.body.decode('utf-8')
-
-
         # 處理訊息 Handler when receiver Line Message 
         try:
             handler.handle(body, signature)
