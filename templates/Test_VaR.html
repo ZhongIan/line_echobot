@@ -1,0 +1,145 @@
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+        {% load staticfiles %}
+        <!--bootstrap-->
+        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    
+        <script src="{% static 'js/jquery.js' %}"></script>
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+        <!-- plotly -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+
+<body>
+
+    <font face="微軟正黑體">
+    <div class="container">
+        <form action="/echobot/out/" method="GET">
+            <div class="form-group">
+                {% csrf_token %}
+                <h3>股票代號</h3>
+                <input type="text" name="name" class="form-control" value={{name}}>
+                <br>
+                <h3>alpha:</h3>
+                <input type="text" name="alpha" class="form-control" value={{alpha}}>
+                <br>
+                <h3>變異數估算方法:[sample,weight]</h3>
+                <input type="text" name="method" class="form-control" value={{method}}>
+                <br>
+                <button type="submit" class="btn btn-primary">送出</button>
+                <!-- <input type="submit"  value="送出" style="font-family:微軟正黑體"> -->
+            </div>
+        </form>
+        <h3>歷史模擬法:</h3>
+        <div id="mydiv-hist"></div>
+        <p>風險值穿透次數:{{ hist_dis_VaR }}</p><br>
+        <p>條件風險值穿透次數:{{ hist_dis_CVaR }}</p>
+        <br>
+        <h3>變異數共變異數法:</h3>
+        <div id="mydiv-cm"></div>
+        <p>風險值穿透次數:{{ cm_dis_VaR }}</p><br>
+        <p>條件風險值穿透次數:{{ cm_dis_CVaR }}</p>
+        <br>
+        <h3>蒙地卡羅模擬法:</h3>
+        <div id="mydiv-mote"></div>
+        <p>風險值穿透次數:{{ mote_dis_VaR }}</p><br>
+        <p>條件風險值穿透次數:{{ mote_dis_CVaR }}</p>
+        <br>
+
+    
+    </div>
+    </font>
+</body>
+
+<script>
+// plot 歷史模擬法
+var hist_data = {{ hist_data | safe}};
+
+hist_return={
+    x: hist_data['Date'],
+    y: hist_data['return'],
+    type: 'scatter',
+    name:'return'
+}
+
+hist_VaR={
+    x: hist_data['Date'],
+    y: hist_data['VaR'],
+    type: 'scatter',
+    name:'VaR'
+}
+
+hist_CVaR={
+    x: hist_data['Date'],
+    y: hist_data['CVaR'],
+    type: 'scatter',
+    name:'CVaR'
+}
+
+var plot_hist_data = [hist_return,hist_VaR,hist_CVaR]
+Plotly.newPlot('mydiv-hist', plot_hist_data);
+
+// plot 變異數共變異數法
+var cm_data = {{ cm_data | safe}};
+
+cm_return={
+    x: cm_data['Date'],
+    y: cm_data['return'],
+    type: 'scatter',
+    name:'return'
+}
+
+cm_VaR={
+    x: cm_data['Date'],
+    y: cm_data['VaR'],
+    type: 'scatter',
+    name:'VaR'
+}
+
+cm_CVaR={
+    x: cm_data['Date'],
+    y: cm_data['CVaR'],
+    type: 'scatter',
+    name:'CVaR'
+}
+
+var plot_cm_data = [cm_return,cm_VaR,cm_CVaR]
+Plotly.newPlot('mydiv-cm', plot_cm_data);
+
+// plot 蒙地卡羅模擬法
+var mote_data = {{ mote_data | safe}};
+
+mote_return={
+    x: mote_data['Date'],
+    y: mote_data['return'],
+    type: 'scatter',
+    name:'return'
+}
+
+mote_VaR={
+    x: mote_data['Date'],
+    y: mote_data['VaR'],
+    type: 'scatter',
+    name:'VaR'
+}
+
+mote_CVaR={
+    x: mote_data['Date'],
+    y: mote_data['CVaR'],
+    type: 'scatter',
+    name:'CVaR'
+}
+
+var plot_mote_data = [mote_return,mote_VaR,mote_CVaR]
+Plotly.newPlot('mydiv-mote', plot_mote_data);
+
+</script>
+</html>
