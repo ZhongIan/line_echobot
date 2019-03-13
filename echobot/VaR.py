@@ -242,7 +242,7 @@ class VaR:
        
     def output(self, func):
         (data_result, dis_VaR, dis_CVaR) = func
-        data_result.plot()
+        
         dis = round(self.num_For*self.alpha,2)
         """ print(
             f'理論穿透:{dis}\n' + \
