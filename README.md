@@ -1,6 +1,36 @@
 
 僅記錄參考資源及部分使用流程
 
+# 功能函數
+
+- [風險值](https://nbviewer.jupyter.org/github/ZhongIan/RE_Project/blob/master/%E9%A2%A8%E9%9A%AA%E5%80%BC/F_RE.ipynb)
+
+- [股價資訊及相關新聞](https://nbviewer.jupyter.org/github/ZhongIan/scrapy/blob/master/oil_and_stock_info.ipynb)
+
+# 加入好友
+
+- QRcode
+
+![QRcode](./QRcode.png)
+
+# 功能介紹
+
+## 油價資訊
+
+<div align=center><img width="50%" height="50%" src="./油價資訊.png"/></div>
+
+## 股價資訊及股票相關新聞
+
+<div align=center><img width="50%" height="50%" src="./股價資訊及股票相關新聞.png"/></div>
+
+## 功能列表
+
+<div align=center><img width="50%" height="50%" src="./功能列表.png"/></div>
+
+## 結合風險值以網頁形式在LINE上顯示
+
+<div align=center><img width="50%" height="50%" src="./結合風險值以網頁形式在LINE上顯示.png"/></div>
+
 # line-bot on django
 
 接收訊息後回傳訊息
@@ -42,33 +72,4 @@
 
 - [my app](https://dashboard.heroku.com/apps/zhongian-test-line-bot)
 
-# 功能函數
-
-- [風險值](https://nbviewer.jupyter.org/github/ZhongIan/RE_Project/blob/master/%E9%A2%A8%E9%9A%AA%E5%80%BC/F_RE.ipynb)
-
-- [股價資訊及相關新聞](https://nbviewer.jupyter.org/github/ZhongIan/scrapy/blob/master/oil_and_stock_info.ipynb)
-
-# 加入好友
-
-- QRcode
-
-![QRcode](./QRcode.png)
-
-# 功能介紹
-
-## 油價資訊
-
-![油價資訊](./油價資訊.png)
-
-## 股價資訊及股票相關新聞
-
-![股價資訊及股票相關新聞](./股價資訊及股票相關新聞.png)
-
-## 功能列表
-
-![功能列表](./功能列表.png)
-
-## 結合風險值以網頁形式在LINE上顯示
-
-![結合風險值以網頁形式在LINE上顯示](./結合風險值以網頁形式在LINE上顯示.png)
 
