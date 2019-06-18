@@ -5,7 +5,7 @@
 
 - [風險值](https://nbviewer.jupyter.org/github/ZhongIan/RE_Project/blob/master/%E9%A2%A8%E9%9A%AA%E5%80%BC/F_RE.ipynb)
 
-- [股價資訊及相關新聞](https://nbviewer.jupyter.org/github/ZhongIan/scrapy/blob/master/oil_and_stock_info.ipynb)
+- [股價資訊及相關新聞](https://nbviewer.jupyter.org/github/ZhongIan/py/blob/master/%E7%88%AC%E8%9F%B2/oil_and_stock_info.ipynb)
 
 # 加入好友
 
