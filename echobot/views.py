@@ -84,6 +84,7 @@ df1 = pd.read_sql('SELECT * FROM stock', conn, index_col=['id'])
 def oil_price():
     url = 'https://gas.goodlife.tw/'
     res = requests.get(url)
+    res.encoding = 'utf-8'
     soup = BeautifulSoup(res.text, 'html.parser')
     # 最後更新時間
     main = soup.select('#main')[0].text.replace('\n', '').split('(')[0]
