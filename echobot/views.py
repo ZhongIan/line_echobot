@@ -10,43 +10,6 @@ def index(request):
     print(r.text)
     return HttpResponse('<pre>' + r.text + '</pre>')
 
-# 風險值
-from .VaR import VaR
-import json
-
-def out_VaR(request):
-
-    name=str(request.GET.get('name', 2330))
-    year=2015
-    alpha=float(request.GET.get('alpha', 0.05))
-    method=str(request.GET.get('method', 'sample'))
-
-    a = VaR(name=name,year=year,alpha=alpha,method=method)
-    
-    # '歷史模擬法' # '變異數_共變異數法' # '蒙地卡羅法'
-    # hist = a.main(method_name='歷史模擬法')
-    # (data_result, dis_VaR, dis_CVaR)
-
-    method_dict = [ a.main(method_name=i) for i in ['歷史模擬法','變異數_共變異數法','蒙地卡羅法']]
-    hist_data = json.dumps(method_dict[0][0].to_dict('list'))
-    hist_dis_VaR = method_dict[0][1]
-    hist_dis_CVaR = method_dict[0][2]
-
-    cm_data = json.dumps(method_dict[1][0].to_dict('list'))
-    cm_dis_VaR = method_dict[1][1]
-    cm_dis_CVaR = method_dict[1][2]
-
-    mote_data = json.dumps(method_dict[2][0].to_dict('list'))
-    mote_dis_VaR = method_dict[2][1]
-    mote_dis_CVaR = method_dict[2][2]
-
-    return render(
-        request, 
-        'Test_VaR.html', 
-        locals()
-    )
-
-
 
 # @Initial
 from line_echobot import settings
@@ -238,4 +201,38 @@ def callback(request):
         return HttpResponseBadRequest()
 
 
+# 風險值
+from .VaR import VaR
+import json
 
+def out_VaR(request):
+
+    name=str(request.GET.get('name', 2330))
+    year=2015
+    alpha=float(request.GET.get('alpha', 0.05))
+    method=str(request.GET.get('method', 'sample'))
+
+    a = VaR(name=name,year=year,alpha=alpha,method=method)
+    
+    # '歷史模擬法' # '變異數_共變異數法' # '蒙地卡羅法'
+    # hist = a.main(method_name='歷史模擬法')
+    # (data_result, dis_VaR, dis_CVaR)
+
+    method_dict = [ a.main(method_name=i) for i in ['歷史模擬法','變異數_共變異數法','蒙地卡羅法']]
+    hist_data = json.dumps(method_dict[0][0].to_dict('list'))
+    hist_dis_VaR = method_dict[0][1]
+    hist_dis_CVaR = method_dict[0][2]
+
+    cm_data = json.dumps(method_dict[1][0].to_dict('list'))
+    cm_dis_VaR = method_dict[1][1]
+    cm_dis_CVaR = method_dict[1][2]
+
+    mote_data = json.dumps(method_dict[2][0].to_dict('list'))
+    mote_dis_VaR = method_dict[2][1]
+    mote_dis_CVaR = method_dict[2][2]
+
+    return render(
+        request, 
+        'Test_VaR.html', 
+        locals()
+    )

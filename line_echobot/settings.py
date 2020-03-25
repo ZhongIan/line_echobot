@@ -24,6 +24,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# DEBUG = False 參考
+# https://www.jianshu.com/p/b9ad960b25de
+# 結果無法顯示 改回 TRUE
 DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
@@ -57,6 +60,9 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        # DEBUG = False
+        # https://www.jianshu.com/p/b9ad960b25de
+        # 結果無法顯示 改回 TRUE
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
